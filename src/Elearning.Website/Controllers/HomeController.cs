@@ -11,10 +11,12 @@ namespace Elearning.Website.Controllers
     public class HomeController : Controller
     {
         private readonly IClassManager classManager;
+        private readonly IUserManager userManager;
 
-        public HomeController(IClassManager classManager)
+        public HomeController(IClassManager classManager, IUserManager userManager)
         {
             this.classManager = classManager;
+            this.userManager = userManager;
         }
         public ActionResult Index()
         {
@@ -42,6 +44,40 @@ namespace Elearning.Website.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult Login( LoginModel loginModel, string returnUrl)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = userManager.Login(loginModel.Username, loginModel.Password);
+                if(user==null)
+                {
+                    ModelState.AddModelError("CredentialsMismatch","UserName and Password doesnt match");
+                }
+                else
+                {
+                    Session["User"] = new Elearning.Website.Models.UserModel { Id = user.Id, Name = user.Name };
+                    System.Web.Security.FormsAuthentication.SetAuthCookie(loginModel.Username, false);
+
+                    return Redirect(returnUrl ?? "~/");
+                }
+            }
+            return View(loginModel);
+        }
+
+        public ActionResult Logoff()
+        {
+            Session["User"] = null;
+            System.Web.Security.FormsAuthentication.SignOut();
+            return Redirect("~/");
         }
     }
 }

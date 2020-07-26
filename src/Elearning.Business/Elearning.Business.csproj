@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="ClassManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elearning.Repository\Elearning.Repository.csproj">
