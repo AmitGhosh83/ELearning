@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,14 +36,23 @@ namespace Elearning.Repository
 
         public UserModel Register(string email, string password)
         {
-            var user = DatabaseAccessor.Instance.Users
-                        .Add(new Elearning.Database.User
-                        {
-                            UserEmail = email,
-                            UserPassword = password
-                        });
-            DatabaseAccessor.Instance.SaveChanges();
-            return new UserModel { Id = user.UserId, Name = user.UserEmail };
+            var checkuser = DatabaseAccessor.Instance.Users.FirstOrDefault(x => x.UserEmail.ToLower() == email.ToLower() && x.UserPassword == password.ToLower());
+            if(checkuser!=null)
+            {
+                return null;
+            }
+            else
+            {
+                var user = DatabaseAccessor.Instance.Users
+                .Add(new Elearning.Database.User
+                {
+                    UserEmail = email,
+                    UserPassword = password
+                });
+                DatabaseAccessor.Instance.SaveChanges();
+                return new UserModel { Id = user.UserId, Name = user.UserEmail };
+            }
+
         }
     }
 }

@@ -61,6 +61,7 @@ namespace Elearning.Website.Controllers
                 if(user==null)
                 {
                     ModelState.AddModelError("CredentialsMismatch","UserName and Password doesnt match");
+                    return View();
                 }
                 else
                 {
@@ -78,6 +79,28 @@ namespace Elearning.Website.Controllers
             Session["User"] = null;
             System.Web.Security.FormsAuthentication.SignOut();
             return Redirect("~/");
+        }
+
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Register( RegisterViewModel registerViewModel, string returnUrl)
+        {
+            if(ModelState.IsValid)
+            {
+               var attempteduser= userManager.Register(registerViewModel.Email, registerViewModel.Password);
+                if(attempteduser==null)
+                {
+                    ModelState.AddModelError("UserExists", "UserName and Password combination exists");
+                    return View();
+                }
+                return Redirect(returnUrl ?? "~/");
+            }
+            return View();
         }
     }
 }
