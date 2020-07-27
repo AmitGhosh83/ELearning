@@ -12,11 +12,13 @@ namespace Elearning.Website.Controllers
     {
         private readonly IClassManager classManager;
         private readonly IUserManager userManager;
+        private readonly IUserClassManager userClassManager;
 
-        public HomeController(IClassManager classManager, IUserManager userManager)
+        public HomeController(IClassManager classManager, IUserManager userManager, IUserClassManager userClassManager)
         {
             this.classManager = classManager;
             this.userManager = userManager;
+            this.userClassManager = userClassManager;
         }
         public ActionResult Index()
         {
@@ -30,6 +32,21 @@ namespace Elearning.Website.Controllers
             //var model = new ClassDetailModel { Classes= items };
             var model = items;
             return View(model);
+        }
+
+        [Authorize]
+        public ActionResult EnrolledClasses()
+        {
+            var user = (Elearning.Website.Models.UserModel)Session["User"];
+            var items = userClassManager.ForUser(user.Id)
+                            .Select(x => new Elearning.Website.Models.UserClassModel
+                            {
+                                ClassID = x.Id,
+                                ClassName = x.Name,
+                                ClassDescription = x.Description,
+                                ClassPrice = x.Price
+                            }).ToArray();
+            return View(items);
         }
 
         public ActionResult About()

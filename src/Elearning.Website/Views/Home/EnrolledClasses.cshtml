@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Elearning.Website.Models.UserClassModel>
+
+@{
+    ViewBag.Title = "EnrolledClasses";
+}
+
+<h2>EnrolledClasses</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+    </dl>
+    <table class="table">
+        <tr>
+            <th class="row">
+                @Html.DisplayNameFor(model => model.ClassName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClassDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClassPrice)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(x => item.ClassName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.ClassDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.ClassPrice)
+                    </td>
+                </tr>
+            </tbody>
+
+        }
+    </table>
+</div>
+<hr />
+<p>
+
+    @Html.ActionLink("Back to Home", "Index")
+</p>
+
