@@ -9,12 +9,13 @@ namespace Elearning.Business
 {
     public interface IUserClassManager
     {
-        UserClassModel Add(int userid, int classid);
+        void Add(int userid, int classid);
         UserClassModel[] ForUser(int userid);
     }
 
     public class UserClassModel
     {
+        public int userId { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -29,9 +30,9 @@ namespace Elearning.Business
         {
             this.userClassRepository = userClassRepository;
         }
-        public UserClassModel Add(int userid, int classid)
+        public void Add(int userid, int classid)
         {
-            throw new NotImplementedException();
+            userClassRepository.Add(userid, classid);
         }
 
         public UserClassModel[] ForUser(int userid)

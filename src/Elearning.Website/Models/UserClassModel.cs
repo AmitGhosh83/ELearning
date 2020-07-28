@@ -7,6 +7,7 @@ namespace Elearning.Website.Models
 {
     public class UserClassModel
     {
+        public int UserID { get; set; }
         public int ClassID { get; set; }
         public string ClassName { get; set; }
         public string  ClassDescription { get; set; }

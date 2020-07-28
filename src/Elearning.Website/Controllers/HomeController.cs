@@ -49,6 +49,42 @@ namespace Elearning.Website.Controllers
             return View(items);
         }
 
+        [Authorize]
+        [HttpPost]
+        public ActionResult ClasstoEnroll(EnrollModel enrollModel)
+        {
+            var sessionuser = (Elearning.Website.Models.UserModel)Session["User"];
+            var userid = sessionuser.Id;
+            var newclassid =  enrollModel.ClassID;
+            userClassManager.Add(userid, newclassid);
+
+            return Redirect("~/Home/EnrolledClasses");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult ClasstoEnroll()
+        {
+
+            var items = classManager.Classes
+                            .Select(x => new Elearning.Website.Models.ClassModel(x.ClassId, x.ClassName, x.ClassDescription, x.ClassPrice)).ToArray();
+            //var model = new ClassDetailModel { Classes= items };
+
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (var item in items)
+            {
+                SelectListItem selectListItem = new SelectListItem
+                {
+                    Text = item.Name,
+                    Value = item.Id.ToString()
+
+                };
+                selectListItems.Add(selectListItem);
+            }
+            ViewBag.Items = selectListItems;
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
