@@ -8,6 +8,7 @@ namespace Elearning.Website.Models
 {
     public class EnrollModel
     {
-        public int ClassID { get; set; } = 1;
+        public int ClassId { get; set; }
+
     }
 }

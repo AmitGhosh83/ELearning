@@ -28,8 +28,6 @@ namespace Elearning.Repository
     {
         public void Add(int userid, int classid)
         {
-            //var checkuserclasscombination = DatabaseAccessor.Instance.Users.FirstOrDefault(x => x.UserId == userid).Classes.FirstOrDefault(x => x.ClassId == sharedclass.ClassId);
-
             var checkuserclasscombination = DatabaseAccessor.Instance.Users.Include(n => n.Classes).FirstOrDefault(x => x.UserId == userid && x.Classes.Any(n=>n.ClassId== classid));
 
             if (checkuserclasscombination!=null)

@@ -5,8 +5,7 @@ using System.Web;
 
 namespace Elearning.Website.Models
 {
-    public class ClassDetailModel
+    public class EnrollToClassViewModel
     {
-        public ClassModel[] Classes { get; set; }
     }
 }

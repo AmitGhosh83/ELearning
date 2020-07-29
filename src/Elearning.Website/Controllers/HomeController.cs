@@ -50,40 +50,52 @@ namespace Elearning.Website.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public ActionResult ClasstoEnroll(EnrollModel enrollModel)
-        {
-            var sessionuser = (Elearning.Website.Models.UserModel)Session["User"];
-            var userid = sessionuser.Id;
-            var newclassid =  enrollModel.ClassID;
-            userClassManager.Add(userid, newclassid);
-
-            return Redirect("~/Home/EnrolledClasses");
-        }
-
-        [Authorize]
         [HttpGet]
         public ActionResult ClasstoEnroll()
         {
 
             var items = classManager.Classes
-                            .Select(x => new Elearning.Website.Models.ClassModel(x.ClassId, x.ClassName, x.ClassDescription, x.ClassPrice)).ToArray();
+                            .Select(x => new Elearning.Website.Models.ClassModel(x.ClassId, x.ClassName, x.ClassDescription, x.ClassPrice)).ToList();
             //var model = new ClassDetailModel { Classes= items };
 
-            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            //List<SelectListItem> selectListItems = new List<SelectListItem>();
+            //foreach (var item in items)
+            //{
+            //    SelectListItem selectListItem = new SelectListItem
+            //    {
+            //        Text = item.Name,
+            //        Value = item.Id.ToString()
+
+            //    };
+            //    selectListItems.Add(selectListItem);
+            //}
+            //ViewBag.Items = selectListItems;
+
+            EnrollClassList model = new EnrollClassList();
+
             foreach (var item in items)
             {
-                SelectListItem selectListItem = new SelectListItem
-                {
-                    Text = item.Name,
-                    Value = item.Id.ToString()
-
-                };
-                selectListItems.Add(selectListItem);
+                model.ClassId = item.Id;
+              
+                model.ClassList.Add(item);
             }
-            ViewBag.Items = selectListItems;
-            return View();
+
+            return View(model);
         }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ClasstoEnroll(EnrollModel enrollModel)
+        {
+            var sessionuser = (Elearning.Website.Models.UserModel)Session["User"];
+            var userid = sessionuser.Id;
+            var newclassid =  enrollModel.ClassId;
+            userClassManager.Add(userid, newclassid);
+
+            return Redirect("~/Home/EnrolledClasses");
+        }
+
+
 
         public ActionResult About()
         {
